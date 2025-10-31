@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 import { NextRequest } from "next/server";
-import { RIA_SYSTEM_PROMPT, FRIENDLY_STYLE_HINT } from "@/lib/riaPrompt";
-
+import { RIA_SYSTEM_PROMPT, FRIENDLY_STYLE_HINT,RIA_FEWSHOT,RIA_OUTPUT_CHECKLIST } from "@/lib/riaPrompt";
 export const runtime = "edge";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -16,14 +15,16 @@ export async function POST(req: NextRequest) {
 
     const res = await openai.responses.create({
       model: "gpt-4o",
-      temperature: 1.1,
+      temperature: 1.12,
       top_p: 0.93,
-      max_output_tokens: 500,
+      max_output_tokens: 700,
       input: [
         { role: "system", content: RIA_SYSTEM_PROMPT },
         { role: "system", content: FRIENDLY_STYLE_HINT },
+        ...RIA_FEWSHOT,
         ...history,
         { role: "user", content: userMessage },
+        { role: "system", content: RIA_OUTPUT_CHECKLIST },
       ],
     });
 
