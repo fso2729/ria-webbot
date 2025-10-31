@@ -1,26 +1,37 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================
+   基本テーマカラー（リア風）
+============================ */
+@theme {
+  --color-bg-sky-top: #7bb6ff;   /* 空上部 */
+  --color-bg-sky-mid: #a8d2ff;   /* 空中部 */
+  --color-bg-sky-btm: #79b5ff;   /* 空下部 */
+  --color-bubble-assist: rgb(255 255 255 / 0.70);  /* リア(アシスタント)の吹き出し */
+  --color-bubble-user:   rgb(186 230 253 / 0.70);  /* 自分の吹き出し(水色) */
+  --color-input:         rgb(255 255 255 / 0.40);  /* 入力欄(透明白) */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================
+   ベース設定
+============================ */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--font-geist-sans, "Noto Sans JP", system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
+  color: #2b3a4a;
+  background: transparent; /* 背景は layout.tsx 側の青空グラデを使う */
+  overflow: hidden;         /* 画面全体にスクロールを出さず、中身で制御 */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================
+   アニメーション効果（ふわっと出る）
+============================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
