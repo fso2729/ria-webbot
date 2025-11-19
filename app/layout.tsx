@@ -33,7 +33,7 @@ export default function RootLayout({
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('meatingHall.png')",
+            backgroundImage: "url('MeetingHall.png')",
           }}
         />
 
