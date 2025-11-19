@@ -217,7 +217,7 @@ export default function Page() {
         src="/ria_.png"
         alt="Ria"
         aria-hidden
-        className="pointer-events-none select-none absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[620px] max-w-[45vw] opacity-100 z-0"
+        className="pointer-events-none select-none absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[500px] max-w-[45vw] opacity-100 z-0"
       />
 
       {/* メッセージ領域（カード枠なしで背景に直接積む） */}
@@ -225,7 +225,7 @@ export default function Page() {
         {/* 読みやすさ向上のための左サイド淡いグラデ（背景と同化） */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-full max-w-full sm:w-[600px] sm:max-w-[56%] z-0 rounded-2xl"
+          className="pointer-events-none absolute inset-y-0 left-0 w-full max-w-full sm:w-[500px] sm:max-w-[56%] z-0 rounded-2xl"
           style={{
             background: "rgba(255, 255, 255, 0.25)",
             backdropFilter: "blur(4px)",
