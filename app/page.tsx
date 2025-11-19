@@ -217,22 +217,22 @@ export default function Page() {
         src="/ria_.png"
         alt="Ria"
         aria-hidden
-        className="pointer-events-none select-none absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[740px] max-w-[52vw] opacity-100 z-0"
+        className="pointer-events-none select-none absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[620px] max-w-[45vw] opacity-100 z-0"
       />
 
       {/* メッセージ領域（カード枠なしで背景に直接積む） */}
-      <div className="mt-6 w-full max-w-4xl px-2 sm:px-3 flex flex-col items-start pl-[0] ml-[-110%] relative">
+      <div className="mt-6 w-full max-w-4xl px-2 sm:px-3 flex flex-col items-center sm:items-start pl-[0] ml-0 sm:ml-[-110%] relative">
         {/* 読みやすさ向上のための左サイド淡いグラデ（背景と同化） */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-[600px] max-w-[56%] z-0 rounded-2xl"
+          className="pointer-events-none absolute inset-y-0 left-0 w-full max-w-full sm:w-[600px] sm:max-w-[56%] z-0 rounded-2xl"
           style={{
             background: "rgba(255, 255, 255, 0.25)",
             backdropFilter: "blur(4px)",
           }}
         />
         {/* チャット専用カラム（右側に安全地帯を確保するため固定幅） */}
-        <div className="relative z-10 w-[590px] max-w-[56%]">
+        <div className="relative z-10 w-full max-w-[600px] sm:w-[590px] sm:max-w-[56%]">
           {/* 履歴表示 */}
           <div ref={scrollRef} className="max-h-[75vh] min-h-[40vh] overflow-y-auto pb-14 pt-10 sm:pt-28">
             <div className="flex flex-col gap-3">
