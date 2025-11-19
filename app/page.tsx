@@ -106,22 +106,115 @@ export default function Page() {
     }
   }
 
+  // ====== 音声まわり（最小実装：Web Speech + SpeechSynthesis） ======
+  const [listening, setListening] = useState(false);
+  const [speakingEnabled, setSpeakingEnabled] = useState(true);
+  const recognitionRef = useRef<any>(null);
+
+  function ensureRecognition() {
+    if (recognitionRef.current) return recognitionRef.current;
+    const SR: any = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    if (!SR) return null;
+    const rec = new SR();
+    rec.lang = "ja-JP";
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.maxAlternatives = 1;
+    recognitionRef.current = rec;
+    return rec;
+  }
+
+  async function toggleListening() {
+    const rec = ensureRecognition();
+    if (!rec) {
+      alert("このブラウザは音声認識APIに対応していません。Chrome系をご利用ください。");
+      return;
+    }
+    if (!listening) {
+      rec.onresult = (e: any) => {
+        let finalText = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const r = e.results[i];
+          if (r.isFinal) finalText += r[0].transcript;
+        }
+        if (finalText.trim()) {
+          setInput(finalText);
+          send();
+        }
+      };
+      rec.onend = () => {
+        setListening(false);
+      };
+      try { rec.start(); } catch {}
+      setListening(true);
+    } else {
+      try { rec.stop(); } catch {}
+      setListening(false);
+    }
+  }
+
+  // ====== 会話履歴クリア ======
+  function clearHistory() {
+    const ok = confirm("会話履歴をすべて消去します。よろしいですか？");
+    if (!ok) return;
+    try { localStorage.removeItem(HISTORY_KEY); } catch {}
+    setHistory([{ role: "assistant", content: "こんにちは。リアです。ご用件を教えてください。" }]);
+    setInput("");
+  }
+
+  // ====== アシスタントの返答を自動読み上げ（最小TTS） ======
+  useEffect(() => {
+    if (!speakingEnabled) return;
+    if (typeof window === "undefined") return;
+    if (!("speechSynthesis" in window)) return;
+    const last = [...history].reverse().find((m) => m.role === "assistant");
+    if (!last) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(last.content);
+    u.lang = "ja-JP";
+    u.rate = 1.0;
+    u.pitch = 1.05;
+    u.volume = 1.0;
+    window.speechSynthesis.speak(u);
+  }, [history, speakingEnabled]);
+
   return (
     <main className="min-h-dvh flex flex-col items-center justify-start p-6 sm:p-8 text-slate-800 relative">
       {/* 上部ヘッダー（エミリー先生風の半透明バー） */}
       <header className="fixed top-0 left-0 right-0 z-20">
         <div className="mx-auto max-w-screen-2xl">
-          <div className="h-12 sm:h-14 bg-black/25 backdrop-blur-md flex items-center justify-center">
+          <div className="h-12 sm:h-14 bg-black/25 backdrop-blur-md flex items-center justify-center relative px-3">
             <span className="text-white text-base sm:text-lg font-semibold tracking-wide">Ria</span>
+            <div className="absolute right-2 flex items-center gap-2">
+              <button
+                onClick={toggleListening}
+                className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white/90 bg-sky-500/70 hover:bg-sky-500 active:scale-[0.99]"
+              >
+                <span>{listening ? "録音停止" : "録音開始"}</span>
+              </button>
+              <button
+                onClick={() => setSpeakingEnabled((v) => !v)}
+                className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white/90 bg-emerald-500/70 hover:bg-emerald-500 active:scale-[0.99]"
+              >
+                <span>{speakingEnabled ? "読み上げON" : "読み上げOFF"}</span>
+              </button>
+              <button
+                onClick={clearHistory}
+                className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white/90 bg-rose-500/70 hover:bg-rose-500 active:scale-[0.99]"
+                title="会話履歴をすべて削除"
+              >
+                履歴クリア
+              </button>
+            </div>
           </div>
         </div>
       </header>
       {/* ヘッダー分のスペーサー（重なり防止） */}
       <div className="h-12 sm:h-14" />
 
-      {/* 中央のリア画像（/public/ria-.png） */}
+      {/* 中央のリア画像（/public/ria_.png） */}
       <img
-        src="/ria-.png"
+        src="/ria_.png"
         alt="Ria"
         aria-hidden
         className="pointer-events-none select-none absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[740px] max-w-[52vw] opacity-100 z-0"
