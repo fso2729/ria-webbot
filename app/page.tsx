@@ -122,7 +122,7 @@ export default function Page() {
 
 
   return (
-    <main className="min-h-dvh flex flex-col items-center justify-start p-0 sm:p-8 text-slate-800 relative">
+    <main className="h-dvh max-h-dvh flex flex-col items-center justify-start p-0 sm:p-8 text-slate-800 relative overflow-hidden">
       {/* 上部ヘッダー（エミリー先生風の半透明バー） */}
       <header className="fixed top-0 left-0 right-0 z-20">
         <div className="mx-auto max-w-screen-2xl">
@@ -141,7 +141,7 @@ export default function Page() {
         </div>
       </header>
       {/* ヘッダー分のスペーサー（重なり防止） */}
-      <div className="h-12 sm:h-14" />
+      <div className="h-12 sm:h-14 shrink-0" />
 
       {/* 中央のリア画像（/public/ria_.png） */}
       <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
@@ -159,7 +159,7 @@ export default function Page() {
       </div>
 
       {/* メッセージ領域 */}
-      <div className="flex-1 w-full max-w-3xl z-10 flex flex-col relative">
+      <div className="flex-1 w-full max-w-3xl z-10 flex flex-col relative min-h-0">
         {/* 履歴表示 */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 sm:px-0 scroll-smooth">
           <div className="flex flex-col gap-4 pb-4 pt-2">
@@ -195,7 +195,7 @@ export default function Page() {
       </div>
 
       {/* 入力バー（中央下・やや小さめの丸み） */}
-      <div className="sticky bottom-0 w-full">
+      <div className="sticky bottom-0 w-full z-20 shrink-0">
         <div className="mx-auto w-full max-w-xl px-3 pb-3">
           <div className="rounded-full border border-white/30 bg-white/45 backdrop-blur-md shadow-lg p-2 text-slate-800">
             <div className="flex items-center gap-2">
