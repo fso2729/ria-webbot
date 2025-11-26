@@ -50,9 +50,9 @@ export default function RootLayout({
         />
 
         {/* アプリ本体（ここに各ページのUIが入る） */}
-        <main className="relative z-10 flex items-center justify-center min-h-dvh p-3 sm:p-6">
+        <div className="relative z-10 w-full min-h-dvh">
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );

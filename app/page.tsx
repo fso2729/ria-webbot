@@ -26,14 +26,14 @@ export default function Page() {
     try {
       const h = localStorage.getItem(HISTORY_KEY);
       if (h) setHistory(JSON.parse(h));
-    } catch {}
+    } catch { }
   }, []);
 
   // 変更を保存
   useEffect(() => {
     try {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-    } catch {}
+    } catch { }
   }, [history]);
 
   // 自動スクロール
@@ -145,10 +145,10 @@ export default function Page() {
       rec.onend = () => {
         setListening(false);
       };
-      try { rec.start(); } catch {}
+      try { rec.start(); } catch { }
       setListening(true);
     } else {
-      try { rec.stop(); } catch {}
+      try { rec.stop(); } catch { }
       setListening(false);
     }
   }
@@ -157,7 +157,7 @@ export default function Page() {
   function clearHistory() {
     const ok = confirm("会話履歴をすべて消去します。よろしいですか？");
     if (!ok) return;
-    try { localStorage.removeItem(HISTORY_KEY); } catch {}
+    try { localStorage.removeItem(HISTORY_KEY); } catch { }
     setHistory([{ role: "assistant", content: "こんにちは。リアです。ご用件を教えてください。" }]);
     setInput("");
   }
@@ -179,7 +179,7 @@ export default function Page() {
   }, [history, speakingEnabled]);
 
   return (
-    <main className="min-h-dvh flex flex-col items-center justify-start p-6 sm:p-8 text-slate-800 relative">
+    <main className="min-h-dvh flex flex-col items-center justify-start p-0 sm:p-8 text-slate-800 relative">
       {/* 上部ヘッダー（エミリー先生風の半透明バー） */}
       <header className="fixed top-0 left-0 right-0 z-20">
         <div className="mx-auto max-w-screen-2xl">
@@ -213,51 +213,46 @@ export default function Page() {
       <div className="h-12 sm:h-14" />
 
       {/* 中央のリア画像（/public/ria_.png） */}
-      <img
-        src="/ria_.png"
-        alt="Ria"
-        aria-hidden
-        className="pointer-events-none select-none absolute left-1/2 top-[68%] -translate-x-1/2 -translate-y-1/2 w-[500px] max-w-[45vw] opacity-100 z-0"
-      />
-
-      {/* メッセージ領域（カード枠なしで背景に直接積む） */}
-      <div className="mt-6 w-full max-w-4xl px-2 sm:px-3 flex flex-col items-center sm:items-start pl-[0] ml-0 sm:ml-[-110%] relative">
-        {/* 読みやすさ向上のための左サイド淡いグラデ（背景と同化） */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-full max-w-full sm:w-[500px] sm:max-w-[56%] z-0 rounded-2xl"
-          style={{
-            background: "rgba(255, 255, 255, 0.25)",
-            backdropFilter: "blur(4px)",
-          }}
+      <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        <img
+          src="/ria_.png"
+          alt="Ria"
+          className="w-[800px] max-w-[90vw] opacity-80 object-contain translate-y-[10%]"
         />
-        {/* チャット専用カラム（右側に安全地帯を確保するため固定幅） */}
-        <div className="relative z-10 w-full max-w-[600px] sm:w-[590px] sm:max-w-[56%]">
-          {/* 履歴表示 */}
-          <div ref={scrollRef} className="max-h-[75vh] min-h-[40vh] overflow-y-auto pb-14 pt-10 sm:pt-28">
-            <div className="flex flex-col gap-3">
-              {history.map((t, i) => (
-                <div key={i} className="flex flex-col items-start">
-                  <div className="flex items-center gap-2 mb-1 ml-0.5 -mt-0.5">
-                    <div
-                      className={`text-xs font-medium text-white px-2.5 py-[2px] rounded-full shadow-sm ${
-                        t.role === "assistant" ? "bg-sky-400" : "bg-orange-400"
-                      }`}
-                    >
-                      {t.role === "assistant" ? "リア" : "あなた"}
-                    </div>
-                  </div>
+      </div>
+
+      {/* メッセージ領域 */}
+      <div className="flex-1 w-full max-w-3xl z-10 flex flex-col relative">
+        {/* 履歴表示 */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 sm:px-0 scroll-smooth">
+          <div className="flex flex-col gap-4 pb-4 pt-2">
+            {history.map((t, i) => (
+              <div key={i} className={`flex flex-col ${t.role === 'assistant' ? 'items-start' : 'items-end'}`}>
+                <div className="flex items-center gap-2 mb-1 px-1">
                   <div
-                    className="fade-in max-w-full rounded-3xl px-4 py-2 bg-white/50 backdrop-blur-lg border border-white/40 shadow-md text-slate-800"
+                    className={`text-xs font-medium text-white px-2.5 py-[2px] rounded-full shadow-sm ${t.role === "assistant" ? "bg-sky-400" : "bg-orange-400"
+                      }`}
                   >
-                    <p className="whitespace-pre-wrap leading-relaxed sm:leading-7">{t.content}</p>
+                    {t.role === "assistant" ? "リア" : "あなた"}
                   </div>
                 </div>
-              ))}
-              {loading && (
-                <div className="text-slate-600 text-sm animate-pulse">リアが考えています…</div>
-              )}
-            </div>
+                <div
+                  className={`fade-in max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 shadow-sm text-slate-800 ${t.role === 'assistant'
+                      ? 'bg-white/80 backdrop-blur-md rounded-tl-none border border-white/50'
+                      : 'bg-sky-100/90 backdrop-blur-md rounded-tr-none border border-sky-200/50'
+                    }`}
+                >
+                  <p className="whitespace-pre-wrap leading-relaxed">{t.content}</p>
+                </div>
+              </div>
+            ))}
+            {loading && (
+              <div className="flex items-center gap-2 text-slate-600 text-sm animate-pulse px-2">
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+              </div>
+            )}
           </div>
         </div>
       </div>
