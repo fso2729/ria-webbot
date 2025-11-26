@@ -135,22 +135,8 @@ export default function Page() {
         />
       </div>
 
-      {/* === Desktop: 左側カラム (Ria表示エリア) === */}
-      <div className="hidden sm:flex w-1/2 h-full items-end justify-center relative z-0 pl-8 pb-8">
-        <img
-          src="/ria_.png"
-          alt="Ria"
-          className="
-            object-contain
-            max-h-[90vh]
-            w-auto
-            drop-shadow-xl
-          "
-        />
-      </div>
-
-      {/* === Right Side (Chat Area) === 
-          Mobile: 全画面 / Desktop: 右半分
+      {/* === Left Side (Chat Area) === 
+          Mobile: 全画面 / Desktop: 左半分
       */}
       <div className="flex-1 h-full flex flex-col relative z-10 w-full sm:w-1/2 sm:bg-white/10 sm:backdrop-blur-sm">
 
@@ -179,8 +165,8 @@ export default function Page() {
                   <div className="flex items-center gap-2 mb-1 px-1">
                     <div
                       className={`text-xs font-bold px-2 py-0.5 rounded-full shadow-sm ${t.role === "assistant"
-                          ? "bg-sky-500 text-white"
-                          : "bg-orange-400 text-white"
+                        ? "bg-sky-500 text-white"
+                        : "bg-orange-400 text-white"
                         }`}
                     >
                       {t.role === "assistant" ? "Ria" : "You"}
@@ -188,8 +174,8 @@ export default function Page() {
                   </div>
                   <div
                     className={`fade-in max-w-[85%] rounded-2xl px-5 py-3 shadow-sm text-slate-800 leading-relaxed ${t.role === 'assistant'
-                        ? 'bg-white/90 backdrop-blur rounded-tl-none border border-white/60'
-                        : 'bg-sky-100/95 backdrop-blur rounded-tr-none border border-sky-200/60'
+                      ? 'bg-white/90 backdrop-blur rounded-tl-none border border-white/60'
+                      : 'bg-sky-100/95 backdrop-blur rounded-tr-none border border-sky-200/60'
                       }`}
                   >
                     <p className="whitespace-pre-wrap">{t.content}</p>
@@ -236,6 +222,20 @@ export default function Page() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* === Desktop: 右側カラム (Ria表示エリア) === */}
+      <div className="hidden sm:flex w-1/2 h-full items-end justify-center relative z-0 pr-8 pb-8">
+        <img
+          src="/ria_.png"
+          alt="Ria"
+          className="
+            object-contain
+            max-h-[90vh]
+            w-auto
+            drop-shadow-xl
+          "
+        />
       </div>
     </main>
   );
