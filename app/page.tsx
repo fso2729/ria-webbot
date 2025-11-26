@@ -107,51 +107,8 @@ export default function Page() {
   }
 
   // ====== 音声まわり（最小実装：Web Speech + SpeechSynthesis） ======
-  const [listening, setListening] = useState(false);
-  const [speakingEnabled, setSpeakingEnabled] = useState(true);
-  const recognitionRef = useRef<any>(null);
-
-  function ensureRecognition() {
-    if (recognitionRef.current) return recognitionRef.current;
-    const SR: any = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-    if (!SR) return null;
-    const rec = new SR();
-    rec.lang = "ja-JP";
-    rec.continuous = true;
-    rec.interimResults = true;
-    rec.maxAlternatives = 1;
-    recognitionRef.current = rec;
-    return rec;
-  }
-
-  async function toggleListening() {
-    const rec = ensureRecognition();
-    if (!rec) {
-      alert("このブラウザは音声認識APIに対応していません。Chrome系をご利用ください。");
-      return;
-    }
-    if (!listening) {
-      rec.onresult = (e: any) => {
-        let finalText = "";
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          const r = e.results[i];
-          if (r.isFinal) finalText += r[0].transcript;
-        }
-        if (finalText.trim()) {
-          setInput(finalText);
-          send();
-        }
-      };
-      rec.onend = () => {
-        setListening(false);
-      };
-      try { rec.start(); } catch { }
-      setListening(true);
-    } else {
-      try { rec.stop(); } catch { }
-      setListening(false);
-    }
-  }
+  // 録音機能は削除されました
+  // 読み上げ機能も削除されました
 
   // ====== 会話履歴クリア ======
   function clearHistory() {
@@ -162,21 +119,7 @@ export default function Page() {
     setInput("");
   }
 
-  // ====== アシスタントの返答を自動読み上げ（最小TTS） ======
-  useEffect(() => {
-    if (!speakingEnabled) return;
-    if (typeof window === "undefined") return;
-    if (!("speechSynthesis" in window)) return;
-    const last = [...history].reverse().find((m) => m.role === "assistant");
-    if (!last) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(last.content);
-    u.lang = "ja-JP";
-    u.rate = 1.0;
-    u.pitch = 1.05;
-    u.volume = 1.0;
-    window.speechSynthesis.speak(u);
-  }, [history, speakingEnabled]);
+
 
   return (
     <main className="min-h-dvh flex flex-col items-center justify-start p-0 sm:p-8 text-slate-800 relative">
@@ -186,18 +129,6 @@ export default function Page() {
           <div className="h-12 sm:h-14 bg-black/25 backdrop-blur-md flex items-center justify-center relative px-3">
             <span className="text-white text-base sm:text-lg font-semibold tracking-wide">Ria</span>
             <div className="absolute right-2 flex items-center gap-2">
-              <button
-                onClick={toggleListening}
-                className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white/90 bg-sky-500/70 hover:bg-sky-500 active:scale-[0.99]"
-              >
-                <span>{listening ? "録音停止" : "録音開始"}</span>
-              </button>
-              <button
-                onClick={() => setSpeakingEnabled((v) => !v)}
-                className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white/90 bg-emerald-500/70 hover:bg-emerald-500 active:scale-[0.99]"
-              >
-                <span>{speakingEnabled ? "読み上げON" : "読み上げOFF"}</span>
-              </button>
               <button
                 onClick={clearHistory}
                 className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white/90 bg-rose-500/70 hover:bg-rose-500 active:scale-[0.99]"
@@ -217,7 +148,13 @@ export default function Page() {
         <img
           src="/ria_.png"
           alt="Ria"
-          className="w-[800px] max-w-[90vw] opacity-80 object-contain translate-y-[10%]"
+          className="
+            opacity-80 object-contain
+            /* モバイル: 上半身のみ（拡大して上に寄せる） */
+            w-[180%] max-w-none translate-y-[15%]
+            /* デスクトップ: 引きの画角（小さく表示） */
+            sm:w-[500px] sm:max-w-[70vw] sm:translate-y-[8%]
+          "
         />
       </div>
 
@@ -238,8 +175,8 @@ export default function Page() {
                 </div>
                 <div
                   className={`fade-in max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 shadow-sm text-slate-800 ${t.role === 'assistant'
-                      ? 'bg-white/80 backdrop-blur-md rounded-tl-none border border-white/50'
-                      : 'bg-sky-100/90 backdrop-blur-md rounded-tr-none border border-sky-200/50'
+                    ? 'bg-white/80 backdrop-blur-md rounded-tl-none border border-white/50'
+                    : 'bg-sky-100/90 backdrop-blur-md rounded-tr-none border border-sky-200/50'
                     }`}
                 >
                   <p className="whitespace-pre-wrap leading-relaxed">{t.content}</p>

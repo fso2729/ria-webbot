@@ -6,9 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "bot": "ts-node bot/index.ts"
   },
   "dependencies": {
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.2.3",
     "next": "16.0.1",
     "openai": "^6.7.0",
     "react": "19.2.0",
@@ -24,6 +27,7 @@
     "eslint-config-next": "16.0.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.16",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
