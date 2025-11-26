@@ -122,98 +122,117 @@ export default function Page() {
 
 
   return (
-    <main className="h-dvh max-h-dvh flex flex-col items-center justify-start p-0 sm:p-8 text-slate-800 relative overflow-hidden">
-      {/* 上部ヘッダー（エミリー先生風の半透明バー） */}
-      <header className="fixed top-0 left-0 right-0 z-20">
-        <div className="mx-auto max-w-screen-2xl">
-          <div className="h-12 sm:h-14 bg-black/25 backdrop-blur-md flex items-center justify-center relative px-3">
-            <span className="text-white text-base sm:text-lg font-semibold tracking-wide">Ria</span>
-            <div className="absolute right-2 flex items-center gap-2">
-              <button
-                onClick={clearHistory}
-                className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white/90 bg-rose-500/70 hover:bg-rose-500 active:scale-[0.99]"
-                title="会話履歴をすべて削除"
-              >
-                履歴クリア
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-      {/* ヘッダー分のスペーサー（重なり防止） */}
-      <div className="h-12 sm:h-14 shrink-0" />
+    <main className="h-dvh max-h-dvh w-full flex flex-col sm:flex-row overflow-hidden text-slate-800 relative">
+      {/* 背景（共通）：スマホはここでRiaを表示、PCは左カラムで表示するためここは背景色/画像のみでも良いが、
+          既存の背景(Layout側)があるので、ここはRiaの配置制御が主 */}
 
-      {/* 中央のリア画像（/public/ria_.png） */}
-      <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
+      {/* === Mobile: 背景にRiaを表示 === */}
+      <div className="sm:hidden fixed inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        <img
+          src="/ria_.png"
+          alt="Ria"
+          className="opacity-80 object-contain w-full max-w-none translate-y-[10%]"
+        />
+      </div>
+
+      {/* === Desktop: 左側カラム (Ria表示エリア) === */}
+      <div className="hidden sm:flex w-1/2 h-full items-end justify-center relative z-0 pl-8 pb-8">
         <img
           src="/ria_.png"
           alt="Ria"
           className="
-            opacity-80 object-contain
-            /* モバイル: 上半身のみ（拡大して上に寄せる） */
-            w-full max-w-none translate-y-[10%]
-            /* デスクトップ: 引きの画角（小さく表示） */
-            sm:w-[500px] sm:max-w-[70vw] sm:translate-y-[8%]
+            object-contain
+            max-h-[90vh]
+            w-auto
+            drop-shadow-xl
           "
         />
       </div>
 
-      {/* メッセージ領域 */}
-      <div className="flex-1 w-full max-w-3xl z-10 flex flex-col relative min-h-0">
-        {/* 履歴表示 */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 sm:px-0 scroll-smooth">
-          <div className="flex flex-col gap-4 pb-4 pt-2">
-            {history.map((t, i) => (
-              <div key={i} className={`flex flex-col ${t.role === 'assistant' ? 'items-start' : 'items-end'}`}>
-                <div className="flex items-center gap-2 mb-1 px-1">
+      {/* === Right Side (Chat Area) === 
+          Mobile: 全画面 / Desktop: 右半分
+      */}
+      <div className="flex-1 h-full flex flex-col relative z-10 w-full sm:w-1/2 sm:bg-white/10 sm:backdrop-blur-sm">
+
+        {/* 上部ヘッダー */}
+        <header className="shrink-0 z-20">
+          <div className="h-12 sm:h-16 flex items-center justify-between px-4 sm:px-8 bg-black/10 sm:bg-transparent backdrop-blur-md sm:backdrop-blur-none">
+            <span className="text-white sm:text-slate-700 text-base sm:text-xl font-bold tracking-wide drop-shadow-sm sm:drop-shadow-none">
+              Ria
+            </span>
+            <button
+              onClick={clearHistory}
+              className="rounded-full px-3 py-1.5 text-xs sm:text-sm text-white bg-rose-500/80 hover:bg-rose-500 shadow-sm transition-transform active:scale-95"
+              title="会話履歴をすべて削除"
+            >
+              履歴クリア
+            </button>
+          </div>
+        </header>
+
+        {/* メッセージ領域 */}
+        <div className="flex-1 flex flex-col relative min-h-0">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 scroll-smooth">
+            <div className="flex flex-col gap-4 pb-4 mx-auto max-w-2xl w-full">
+              {history.map((t, i) => (
+                <div key={i} className={`flex flex-col ${t.role === 'assistant' ? 'items-start' : 'items-end'}`}>
+                  <div className="flex items-center gap-2 mb-1 px-1">
+                    <div
+                      className={`text-xs font-bold px-2 py-0.5 rounded-full shadow-sm ${t.role === "assistant"
+                          ? "bg-sky-500 text-white"
+                          : "bg-orange-400 text-white"
+                        }`}
+                    >
+                      {t.role === "assistant" ? "Ria" : "You"}
+                    </div>
+                  </div>
                   <div
-                    className={`text-xs font-medium text-white px-2.5 py-[2px] rounded-full shadow-sm ${t.role === "assistant" ? "bg-sky-400" : "bg-orange-400"
+                    className={`fade-in max-w-[85%] rounded-2xl px-5 py-3 shadow-sm text-slate-800 leading-relaxed ${t.role === 'assistant'
+                        ? 'bg-white/90 backdrop-blur rounded-tl-none border border-white/60'
+                        : 'bg-sky-100/95 backdrop-blur rounded-tr-none border border-sky-200/60'
                       }`}
                   >
-                    {t.role === "assistant" ? "リア" : "あなた"}
+                    <p className="whitespace-pre-wrap">{t.content}</p>
                   </div>
                 </div>
-                <div
-                  className={`fade-in max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 shadow-sm text-slate-800 ${t.role === 'assistant'
-                    ? 'bg-white/80 backdrop-blur-md rounded-tl-none border border-white/50'
-                    : 'bg-sky-100/90 backdrop-blur-md rounded-tr-none border border-sky-200/50'
-                    }`}
-                >
-                  <p className="whitespace-pre-wrap leading-relaxed">{t.content}</p>
+              ))}
+              {loading && (
+                <div className="flex items-center gap-2 text-slate-500 text-sm animate-pulse px-2">
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  <span>Ria is typing...</span>
                 </div>
-              </div>
-            ))}
-            {loading && (
-              <div className="flex items-center gap-2 text-slate-600 text-sm animate-pulse px-2">
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 入力バー（中央下・やや小さめの丸み） */}
-      <div className="sticky bottom-0 w-full z-20 shrink-0">
-        <div className="mx-auto w-full max-w-xl px-3 pb-3">
-          <div className="rounded-full border border-white/30 bg-white/45 backdrop-blur-md shadow-lg p-2 text-slate-800">
-            <div className="flex items-center gap-2">
+        {/* 入力バー */}
+        <div className="shrink-0 z-20 p-4 sm:p-6">
+          <div className="mx-auto w-full max-w-2xl">
+            <div className="rounded-3xl border border-white/40 bg-white/60 backdrop-blur-xl shadow-lg p-2 flex items-end gap-2 transition-all focus-within:ring-2 ring-sky-300/50 focus-within:bg-white/80">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 rows={1}
-                placeholder="メッセージを入力（Cmd/Ctrl + Enter で送信）"
-                className="flex-1 rounded-full bg-white/35 border border-white/30 px-4 py-3 outline-none focus:ring-2 ring-sky-300/60 resize-none text-slate-800 placeholder-gray-500"
+                placeholder="メッセージを入力..."
+                className="flex-1 bg-transparent border-none px-4 py-3 outline-none resize-none text-slate-800 placeholder-slate-500 min-h-[48px] max-h-[120px]"
+                style={{ fieldSizing: "content" } as any}
               />
               <button
                 onClick={send}
                 disabled={loading || !input.trim()}
-                className="shrink-0 rounded-full px-5 py-2 bg-sky-500 text-white shadow hover:bg-sky-600 active:scale-[0.99] disabled:opacity-50"
+                className="shrink-0 rounded-full w-12 h-12 flex items-center justify-center bg-sky-500 text-white shadow-md hover:bg-sky-600 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                送信
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 translate-x-0.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
               </button>
+            </div>
+            <div className="text-center mt-2">
+              <span className="text-[10px] text-slate-500/80">Cmd/Ctrl + Enter で送信</span>
             </div>
           </div>
         </div>
