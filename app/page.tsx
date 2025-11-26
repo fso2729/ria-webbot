@@ -151,7 +151,7 @@ export default function Page() {
           className="
             opacity-80 object-contain
             /* モバイル: 上半身のみ（拡大して上に寄せる） */
-            w-[180%] max-w-none translate-y-[15%]
+            w-full max-w-none translate-y-[10%]
             /* デスクトップ: 引きの画角（小さく表示） */
             sm:w-[500px] sm:max-w-[70vw] sm:translate-y-[8%]
           "
