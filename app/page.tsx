@@ -122,7 +122,7 @@ export default function Page() {
 
 
   return (
-    <main className="h-dvh max-h-dvh flex flex-col items-center justify-start p-0 sm:p-8 text-slate-800 relative overflow-hidden">
+    <main className="h-dvh max-h-dvh flex flex-col justify-start p-0 sm:p-8 text-slate-800 relative overflow-hidden">
       {/* 上部ヘッダー */}
       <header className="fixed top-0 left-0 right-0 z-20">
         <div className="mx-auto max-w-screen-2xl">
@@ -158,8 +158,8 @@ export default function Page() {
         />
       </div>
 
-      {/* メッセージ領域 */}
-      <div className="flex-1 w-full max-w-3xl z-10 flex flex-col relative min-h-0">
+      {/* メッセージ領域：左寄せに変更 */}
+      <div className="flex-1 w-full sm:max-w-lg sm:ml-4 md:ml-12 z-10 flex flex-col relative min-h-0">
         {/* 履歴表示 */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 sm:px-0 scroll-smooth">
           <div className="flex flex-col gap-4 pb-4 pt-2">
@@ -174,7 +174,7 @@ export default function Page() {
                   </div>
                 </div>
                 <div
-                  className={`fade-in max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 shadow-sm text-slate-800 ${t.role === 'assistant'
+                  className={`fade-in max-w-[85%] sm:max-w-[90%] rounded-2xl px-4 py-3 shadow-sm text-slate-800 ${t.role === 'assistant'
                     ? 'bg-white/80 backdrop-blur-md rounded-tl-none border border-white/50'
                     : 'bg-sky-100/90 backdrop-blur-md rounded-tr-none border border-sky-200/50'
                     }`}
