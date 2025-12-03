@@ -175,8 +175,8 @@ export default function Page() {
                 </div>
                 <div
                   className={`fade-in max-w-[85%] sm:max-w-[90%] rounded-2xl px-4 py-3 shadow-sm text-slate-800 ${t.role === 'assistant'
-                    ? 'bg-white/80 backdrop-blur-md rounded-tl-none border border-white/50'
-                    : 'bg-sky-100/90 backdrop-blur-md rounded-tr-none border border-sky-200/50'
+                    ? 'bg-white/60 backdrop-blur-md rounded-tl-none border border-white/50'
+                    : 'bg-sky-100/70 backdrop-blur-md rounded-tr-none border border-sky-200/50'
                     }`}
                 >
                   <p className="whitespace-pre-wrap leading-relaxed">{t.content}</p>
