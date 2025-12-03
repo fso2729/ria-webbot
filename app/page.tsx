@@ -159,7 +159,7 @@ export default function Page() {
       </div>
 
       {/* メッセージ領域：左寄せに変更 */}
-      <div className="flex-1 w-full sm:max-w-lg sm:ml-4 md:ml-12 z-10 flex flex-col relative min-h-0">
+      <div className="flex-1 w-full z-10 flex flex-col relative min-h-0">
         {/* 履歴表示 */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 sm:px-0 scroll-smooth">
           <div className="flex flex-col gap-4 pb-4 pt-2">
