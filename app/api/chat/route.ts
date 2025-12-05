@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { NextRequest } from "next/server";
-import { RIA_SYSTEM_PROMPT, FRIENDLY_STYLE_HINT,RIA_FEWSHOT,RIA_OUTPUT_CHECKLIST } from "@/lib/riaPrompt";
+import { RIA_SYSTEM_PROMPT, FRIENDLY_STYLE_HINT, RIA_FEWSHOT, RIA_OUTPUT_CHECKLIST } from "@/lib/riaPrompt";
 export const runtime = "edge";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -13,12 +13,12 @@ export async function POST(req: NextRequest) {
       userMessage: string;
     };
 
-    const res = await openai.responses.create({
-      model: "gpt-4o",
+    const completion = await openai.chat.completions.create({
+      model: "gpt-5.1",
       temperature: 1.12,
       top_p: 0.93,
-      max_output_tokens: 700,
-      input: [
+      max_tokens: 700,
+      messages: [
         { role: "system", content: RIA_SYSTEM_PROMPT },
         { role: "system", content: FRIENDLY_STYLE_HINT },
         ...RIA_FEWSHOT,
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       ],
     });
 
-    const reply = (res as any).output_text ?? "(応答なし)";
+    const reply = completion.choices[0].message.content ?? "(応答なし)";
     return new Response(JSON.stringify({ reply }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
