@@ -15,8 +15,6 @@ export async function POST(req: NextRequest) {
 
     const completion = await openai.chat.completions.create({
       model: "gpt-5.1",
-      temperature: 1.12,
-      top_p: 0.93,
       max_tokens: 700,
       messages: [
         { role: "system", content: RIA_SYSTEM_PROMPT },
