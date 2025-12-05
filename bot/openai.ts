@@ -10,7 +10,7 @@ const openai = new OpenAI({
 export async function generateKansaiResponse(userMessage: string): Promise<string> {
     try {
         const completion = await openai.chat.completions.create({
-            model: "gpt-5.1",
+            model: "gpt-4o",
             messages: [
                 {
                     role: "system",
