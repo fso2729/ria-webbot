@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
     };
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      max_tokens: 700,
+      model: "gpt-5.1",
+      max_completion_tokens: 700,
       messages: [
         { role: "system", content: RIA_SYSTEM_PROMPT },
         { role: "system", content: FRIENDLY_STYLE_HINT },
